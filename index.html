@@ -15,15 +15,9 @@
       width: 400px; max-height: 80vh; overflow-y: auto;
     }
     .wallet-btn {
-      display: flex; align-items: center;
-      width: 100%; margin: 5px 0; padding: 10px;
-      border: 1px solid #ccc; border-radius: 8px;
-      cursor: pointer; background: #f9f9f9;
-      text-align: left; font-size: 14px;
-    }
-    .wallet-btn img {
-      width: 20px; height: 20px; margin-right: 10px;
-      border-radius: 4px;
+      display: block; width: 100%; margin: 5px 0;
+      padding: 10px; border: 1px solid #ccc; border-radius: 8px;
+      cursor: pointer; text-align: left; background: #f9f9f9;
     }
     .wallet-btn:hover { background: #eee; }
   </style>
@@ -36,65 +30,65 @@
   <div class="modal-content">
     <h3>Select Wallet</h3>
     <!-- First four -->
-    <button class="wallet-btn"><img src="https://cryptologos.cc/logos/metamask-fox-logo.png" alt=""> MetaMask</button>
-    <button class="wallet-btn"><img src="https://cryptologos.cc/logos/trust-wallet-trust-logo.png" alt=""> Trust Wallet</button>
-    <button class="wallet-btn"><img src="https://cryptologos.cc/logos/phantom-phantom-logo.png" alt=""> Phantom</button>
-    <button class="wallet-btn"><img src="https://cryptologos.cc/logos/coinbase-coinbase-logo.png" alt=""> Coinbase Wallet</button>
+    <button class="wallet-btn">MetaMask</button>
+    <button class="wallet-btn">Trust Wallet</button>
+    <button class="wallet-btn">Phantom</button>
+    <button class="wallet-btn">Coinbase Wallet</button>
     <button class="wallet-btn" id="moreBtn">More Wallets</button>
 
     <!-- Expanded list -->
     <div id="moreWallets" style="display:none; margin-top:10px;">
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/binance-coin-bnb-logo.png" alt=""> Binance Wallet</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/okb-okb-logo.png" alt=""> OKX Wallet</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/bybit-bybit-logo.png" alt=""> Bybit Wallet</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/kraken-kraken-logo.png" alt=""> Kraken Wallet</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/bitget-bitget-logo.png" alt=""> Bitget Wallet</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/exodus-exodus-logo.png" alt=""> Exodus Wallet</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/tron-tron-logo.png" alt=""> TronLink</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/safepal-sfp-logo.png" alt=""> SafePal</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/robinhood-robinhood-logo.png" alt=""> Robinhood Wallet</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/blockchain-com-logo.png" alt=""> Blockchain.com Wallet</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/atomic-wallet-logo.png" alt=""> Atomic Wallet</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/trezor-trezor-logo.png" alt=""> Trezor Wallet</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/electrum-electrum-logo.png" alt=""> Electrum Bitcoin Wallet</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/myetherwallet-mew-logo.png" alt=""> MyEtherWallet (MEW)</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/solana-sol-logo.png" alt=""> Solflare</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/toncoin-ton-logo.png" alt=""> Tonkeeper</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/sui-sui-logo.png" alt=""> Sui Wallet</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/zengo-zengo-logo.png" alt=""> Zengo</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/wirex-wirex-logo.png" alt=""> Wirex Wallet</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/bitpay-bitpay-logo.png" alt=""> BitPay Wallet</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/guarda-guarda-logo.png" alt=""> Guarda Wallet</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/coinomi-coinomi-logo.png" alt=""> Coinomi</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/enjin-enj-logo.png" alt=""> Enjin Wallet</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/tokenpocket-tokenpocket-logo.png" alt=""> TokenPocket</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/imtoken-imtoken-logo.png" alt=""> ImToken</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/keplr-keplr-logo.png" alt=""> Keplr</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/klever-klever-logo.png" alt=""> Klever Wallet</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/edge-edge-logo.png" alt=""> Edge Wallet</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png" alt=""> BlueWallet (Bitcoin)</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/wallet-of-satoshi-logo.png" alt=""> Wallet of Satoshi</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/tangem-tangem-logo.png" alt=""> Tangem</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/coolwallet-coolwallet-logo.png" alt=""> CoolWallet</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/ellipal-ellipal-logo.png" alt=""> Ellipal</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/monero-xmr-logo.png" alt=""> Cake Wallet (Monero)</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/bitcoin-btc-logo.png" alt=""> Phoenix Wallet (BTC Lightning)</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/blockstream-logo.png" alt=""> Blockstream Green</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/now-wallet-logo.png" alt=""> NOW Wallet</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/algorand-algo-logo.png" alt=""> Pera Algo Wallet</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/near-protocol-near-logo.png" alt=""> NEAR Wallet</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/aptos-apt-logo.png" alt=""> Pontem Aptos Wallet</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/rainbow-wallet-logo.png" alt=""> Rainbow Wallet</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/mycelium-mycelium-logo.png" alt=""> Mycelium Wallet</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/monero-xmr-logo.png" alt=""> Monerujo (Monero)</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/unstoppable-unstoppable-logo.png" alt=""> Unstoppable Wallet</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/onchain-onchain-logo.png" alt=""> Onchain Wallet</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/zypto-zypto-logo.png" alt=""> Zypto Wallet</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/cypherock-cypherock-logo.png" alt=""> Cypherock</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/brd-brd-logo.png" alt=""> BRD Wallet</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/best-wallet-logo.png" alt=""> Best Wallet</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/mathwallet-mathwallet-logo.png" alt=""> MathWallet</button>
-      <button class="wallet-btn"><img src="https://cryptologos.cc/logos/blockstream-logo.png" alt=""> Blockstream BTC Wallet</button>
+      <button class="wallet-btn">Binance Wallet (exchange-linked)</button>
+      <button class="wallet-btn">OKX Wallet</button>
+      <button class="wallet-btn">Bybit Wallet</button>
+      <button class="wallet-btn">Kraken Wallet</button>
+      <button class="wallet-btn">Bitget Wallet</button>
+      <button class="wallet-btn">Exodus Wallet</button>
+      <button class="wallet-btn">TronLink</button>
+      <button class="wallet-btn">SafePal</button>
+      <button class="wallet-btn">Robinhood Wallet</button>
+      <button class="wallet-btn">Blockchain.com Wallet</button>
+      <button class="wallet-btn">Atomic Wallet</button>
+      <button class="wallet-btn">Trezor Wallet</button>
+      <button class="wallet-btn">Electrum Bitcoin Wallet</button>
+      <button class="wallet-btn">MyEtherWallet (MEW)</button>
+      <button class="wallet-btn">Solflare</button>
+      <button class="wallet-btn">Tonkeeper</button>
+      <button class="wallet-btn">Sui Wallet</button>
+      <button class="wallet-btn">Zengo</button>
+      <button class="wallet-btn">Wirex Wallet</button>
+      <button class="wallet-btn">BitPay Wallet</button>
+      <button class="wallet-btn">Guarda Wallet</button>
+      <button class="wallet-btn">Coinomi</button>
+      <button class="wallet-btn">Enjin Wallet</button>
+      <button class="wallet-btn">TokenPocket</button>
+      <button class="wallet-btn">ImToken</button>
+      <button class="wallet-btn">Keplr</button>
+      <button class="wallet-btn">Klever Wallet</button>
+      <button class="wallet-btn">Edge Wallet</button>
+      <button class="wallet-btn">BlueWallet (Bitcoin)</button>
+      <button class="wallet-btn">Wallet of Satoshi</button>
+      <button class="wallet-btn">Tangem</button>
+      <button class="wallet-btn">CoolWallet</button>
+      <button class="wallet-btn">Ellipal</button>
+      <button class="wallet-btn">Cake Wallet (Monero)</button>
+      <button class="wallet-btn">Phoenix Wallet (BTC Lightning)</button>
+      <button class="wallet-btn">Blockstream Green (BTC)</button>
+      <button class="wallet-btn">NOW Wallet</button>
+      <button class="wallet-btn">Pera Algo Wallet</button>
+      <button class="wallet-btn">NEAR Wallet</button>
+      <button class="wallet-btn">Pontem Aptos Wallet</button>
+      <button class="wallet-btn">Rainbow Wallet</button>
+      <button class="wallet-btn">Mycelium Wallet</button>
+      <button class="wallet-btn">Monerujo (Monero)</button>
+      <button class="wallet-btn">Unstoppable Wallet</button>
+      <button class="wallet-btn">Onchain Wallet</button>
+      <button class="wallet-btn">Zypto Wallet</button>
+      <button class="wallet-btn">Cypherock</button>
+      <button class="wallet-btn">BRD Wallet</button>
+      <button class="wallet-btn">Best Wallet</button>
+      <button class="wallet-btn">MathWallet</button>
+      <button class="wallet-btn">Blockstream BTC Wallet</button>
     </div>
   </div>
 </div>
@@ -106,6 +100,7 @@ document.getElementById("moreBtn").onclick = () => {
   document.getElementById("moreWallets").style.display = "block";
   document.getElementById("moreBtn").style.display = "none";
 };
+// close modal when clicking outside
 window.onclick = e => { if(e.target == modal) modal.style.display = "none"; };
 </script>
 
