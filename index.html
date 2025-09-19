@@ -30,69 +30,70 @@
   <div class="modal-content">
     <h3>Select Wallet</h3>
     <!-- First four -->
-    <button class="wallet-btn">MetaMask</button>
-    <button class="wallet-btn">Trust Wallet</button>
-    <button class="wallet-btn">Phantom</button>
-    <button class="wallet-btn">Coinbase Wallet</button>
+    <button class="wallet-btn" data-wallet="metamask">MetaMask</button>
+    <button class="wallet-btn" data-wallet="trustwallet">Trust Wallet</button>
+    <button class="wallet-btn" data-wallet="phantom">Phantom</button>
+    <button class="wallet-btn" data-wallet="coinbase">Coinbase Wallet</button>
     <button class="wallet-btn" id="moreBtn">More Wallets</button>
 
     <!-- Expanded list -->
     <div id="moreWallets" style="display:none; margin-top:10px;">
-      <button class="wallet-btn">Binance Wallet (exchange-linked)</button>
-      <button class="wallet-btn">OKX Wallet</button>
-      <button class="wallet-btn">Bybit Wallet</button>
-      <button class="wallet-btn">Kraken Wallet</button>
-      <button class="wallet-btn">Bitget Wallet</button>
-      <button class="wallet-btn">Exodus Wallet</button>
-      <button class="wallet-btn">TronLink</button>
-      <button class="wallet-btn">SafePal</button>
-      <button class="wallet-btn">Robinhood Wallet</button>
-      <button class="wallet-btn">Blockchain.com Wallet</button>
-      <button class="wallet-btn">Atomic Wallet</button>
-      <button class="wallet-btn">Trezor Wallet</button>
-      <button class="wallet-btn">Electrum Bitcoin Wallet</button>
-      <button class="wallet-btn">MyEtherWallet (MEW)</button>
-      <button class="wallet-btn">Solflare</button>
-      <button class="wallet-btn">Tonkeeper</button>
-      <button class="wallet-btn">Sui Wallet</button>
-      <button class="wallet-btn">Zengo</button>
-      <button class="wallet-btn">Wirex Wallet</button>
-      <button class="wallet-btn">BitPay Wallet</button>
-      <button class="wallet-btn">Guarda Wallet</button>
-      <button class="wallet-btn">Coinomi</button>
-      <button class="wallet-btn">Enjin Wallet</button>
-      <button class="wallet-btn">TokenPocket</button>
-      <button class="wallet-btn">ImToken</button>
-      <button class="wallet-btn">Keplr</button>
-      <button class="wallet-btn">Klever Wallet</button>
-      <button class="wallet-btn">Edge Wallet</button>
-      <button class="wallet-btn">BlueWallet (Bitcoin)</button>
-      <button class="wallet-btn">Wallet of Satoshi</button>
-      <button class="wallet-btn">Tangem</button>
-      <button class="wallet-btn">CoolWallet</button>
-      <button class="wallet-btn">Ellipal</button>
-      <button class="wallet-btn">Cake Wallet (Monero)</button>
-      <button class="wallet-btn">Phoenix Wallet (BTC Lightning)</button>
-      <button class="wallet-btn">Blockstream Green (BTC)</button>
-      <button class="wallet-btn">NOW Wallet</button>
-      <button class="wallet-btn">Pera Algo Wallet</button>
-      <button class="wallet-btn">NEAR Wallet</button>
-      <button class="wallet-btn">Pontem Aptos Wallet</button>
-      <button class="wallet-btn">Rainbow Wallet</button>
-      <button class="wallet-btn">Mycelium Wallet</button>
-      <button class="wallet-btn">Monerujo (Monero)</button>
-      <button class="wallet-btn">Unstoppable Wallet</button>
-      <button class="wallet-btn">Onchain Wallet</button>
-      <button class="wallet-btn">Zypto Wallet</button>
-      <button class="wallet-btn">Cypherock</button>
-      <button class="wallet-btn">BRD Wallet</button>
-      <button class="wallet-btn">Best Wallet</button>
-      <button class="wallet-btn">MathWallet</button>
-      <button class="wallet-btn">Blockstream BTC Wallet</button>
+      <button class="wallet-btn" data-wallet="binance">Binance Wallet (exchange-linked)</button>
+      <button class="wallet-btn" data-wallet="okx">OKX Wallet</button>
+      <button class="wallet-btn" data-wallet="bybit">Bybit Wallet</button>
+      <button class="wallet-btn" data-wallet="kraken">Kraken Wallet</button>
+      <button class="wallet-btn" data-wallet="bitget">Bitget Wallet</button>
+      <button class="wallet-btn" data-wallet="exodus">Exodus Wallet</button>
+      <button class="wallet-btn" data-wallet="tronlink">TronLink</button>
+      <button class="wallet-btn" data-wallet="safepal">SafePal</button>
+      <button class="wallet-btn" data-wallet="robinhood">Robinhood Wallet</button>
+      <button class="wallet-btn" data-wallet="blockchaincom">Blockchain.com Wallet</button>
+      <button class="wallet-btn" data-wallet="atomic">Atomic Wallet</button>
+      <button class="wallet-btn" data-wallet="trezor">Trezor Wallet</button>
+      <button class="wallet-btn" data-wallet="electrum">Electrum Bitcoin Wallet</button>
+      <button class="wallet-btn" data-wallet="myetherwallet">MyEtherWallet (MEW)</button>
+      <button class="wallet-btn" data-wallet="solflare">Solflare</button>
+      <button class="wallet-btn" data-wallet="tonkeeper">Tonkeeper</button>
+      <button class="wallet-btn" data-wallet="sui">Sui Wallet</button>
+      <button class="wallet-btn" data-wallet="zengo">Zengo</button>
+      <button class="wallet-btn" data-wallet="wirex">Wirex Wallet</button>
+      <button class="wallet-btn" data-wallet="bitpay">BitPay Wallet</button>
+      <button class="wallet-btn" data-wallet="guarda">Guarda Wallet</button>
+      <button class="wallet-btn" data-wallet="coinomi">Coinomi</button>
+      <button class="wallet-btn" data-wallet="enjin">Enjin Wallet</button>
+      <button class="wallet-btn" data-wallet="tokenpocket">TokenPocket</button>
+      <button class="wallet-btn" data-wallet="imtoken">ImToken</button>
+      <button class="wallet-btn" data-wallet="keplr">Keplr</button>
+      <button class="wallet-btn" data-wallet="klever">Klever Wallet</button>
+      <button class="wallet-btn" data-wallet="edge">Edge Wallet</button>
+      <button class="wallet-btn" data-wallet="bluewallet">BlueWallet (Bitcoin)</button>
+      <button class="wallet-btn" data-wallet="walletofsatoshi">Wallet of Satoshi</button>
+      <button class="wallet-btn" data-wallet="tangem">Tangem</button>
+      <button class="wallet-btn" data-wallet="coolwallet">CoolWallet</button>
+      <button class="wallet-btn" data-wallet="ellipal">Ellipal</button>
+      <button class="wallet-btn" data-wallet="cake">Cake Wallet (Monero)</button>
+      <button class="wallet-btn" data-wallet="phoenix">Phoenix Wallet (BTC Lightning)</button>
+      <button class="wallet-btn" data-wallet="blockstreamgreen">Blockstream Green (BTC)</button>
+      <button class="wallet-btn" data-wallet="now">NOW Wallet</button>
+      <button class="wallet-btn" data-wallet="pera">Pera Algo Wallet</button>
+      <button class="wallet-btn" data-wallet="near">NEAR Wallet</button>
+      <button class="wallet-btn" data-wallet="pontem">Pontem Aptos Wallet</button>
+      <button class="wallet-btn" data-wallet="rainbow">Rainbow Wallet</button>
+      <button class="wallet-btn" data-wallet="mycelium">Mycelium Wallet</button>
+      <button class="wallet-btn" data-wallet="monerujo">Monerujo (Monero)</button>
+      <button class="wallet-btn" data-wallet="unstoppable">Unstoppable Wallet</button>
+      <button class="wallet-btn" data-wallet="onchain">Onchain Wallet</button>
+      <button class="wallet-btn" data-wallet="zypto">Zypto Wallet</button>
+      <button class="wallet-btn" data-wallet="cypherock">Cypherock</button>
+      <button class="wallet-btn" data-wallet="brd">BRD Wallet</button>
+      <button class="wallet-btn" data-wallet="best">Best Wallet</button>
+      <button class="wallet-btn" data-wallet="mathwallet">MathWallet</button>
+      <button class="wallet-btn" data-wallet="blockstreambtc">Blockstream BTC Wallet</button>
     </div>
   </div>
 </div>
 
+<script src="wallets.js"></script>
 <script>
 const modal = document.getElementById("walletModal");
 document.getElementById("connectBtn").onclick = () => modal.style.display = "flex";
