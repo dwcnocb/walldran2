@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wallet Connect Modal</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    .modal {
+      display: none; position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%; background: rgba(0,0,0,0.5);
+      justify-content: center; align-items: center;
+    }
+    .modal-content {
+      background: #fff; padding: 20px; border-radius: 10px;
+      width: 400px; max-height: 80vh; overflow-y: auto;
+    }
+    .wallet-btn {
+      display: block; width: 100%; margin: 5px 0;
+      padding: 10px; border: 1px solid #ccc; border-radius: 8px;
+      cursor: pointer; text-align: left; background: #f9f9f9;
+    }
+    .wallet-btn:hover { background: #eee; }
+  </style>
+</head>
+<body>
+
+<button id="connectBtn">Connect Wallet</button>
+
+<div id="walletModal" class="modal">
+  <div class="modal-content">
+    <h3>Select Wallet</h3>
+    <!-- First four -->
+    <button class="wallet-btn">MetaMask</button>
+    <button class="wallet-btn">Trust Wallet</button>
+    <button class="wallet-btn">Phantom</button>
+    <button class="wallet-btn">Coinbase Wallet</button>
+    <button class="wallet-btn" id="moreBtn">More Wallets</button>
+
+    <!-- Expanded list -->
+    <div id="moreWallets" style="display:none; margin-top:10px;">
+      <button class="wallet-btn">Binance Wallet (exchange-linked)</button>
+      <button class="wallet-btn">OKX Wallet</button>
+      <button class="wallet-btn">Bybit Wallet</button>
+      <button class="wallet-btn">Kraken Wallet</button>
+      <button class="wallet-btn">Bitget Wallet</button>
+      <button class="wallet-btn">Exodus Wallet</button>
+      <button class="wallet-btn">TronLink</button>
+      <button class="wallet-btn">SafePal</button>
+      <button class="wallet-btn">Robinhood Wallet</button>
+      <button class="wallet-btn">Blockchain.com Wallet</button>
+      <button class="wallet-btn">Atomic Wallet</button>
+      <button class="wallet-btn">Trezor Wallet</button>
+      <button class="wallet-btn">Electrum Bitcoin Wallet</button>
+      <button class="wallet-btn">MyEtherWallet (MEW)</button>
+      <button class="wallet-btn">Solflare</button>
+      <button class="wallet-btn">Tonkeeper</button>
+      <button class="wallet-btn">Sui Wallet</button>
+      <button class="wallet-btn">Zengo</button>
+      <button class="wallet-btn">Wirex Wallet</button>
+      <button class="wallet-btn">BitPay Wallet</button>
+      <button class="wallet-btn">Guarda Wallet</button>
+      <button class="wallet-btn">Coinomi</button>
+      <button class="wallet-btn">Enjin Wallet</button>
+      <button class="wallet-btn">TokenPocket</button>
+      <button class="wallet-btn">ImToken</button>
+      <button class="wallet-btn">Keplr</button>
+      <button class="wallet-btn">Klever Wallet</button>
+      <button class="wallet-btn">Edge Wallet</button>
+      <button class="wallet-btn">BlueWallet (Bitcoin)</button>
+      <button class="wallet-btn">Wallet of Satoshi</button>
+      <button class="wallet-btn">Tangem</button>
+      <button class="wallet-btn">CoolWallet</button>
+      <button class="wallet-btn">Ellipal</button>
+      <button class="wallet-btn">Cake Wallet (Monero)</button>
+      <button class="wallet-btn">Phoenix Wallet (BTC Lightning)</button>
+      <button class="wallet-btn">Blockstream Green (BTC)</button>
+      <button class="wallet-btn">NOW Wallet</button>
+      <button class="wallet-btn">Pera Algo Wallet</button>
+      <button class="wallet-btn">NEAR Wallet</button>
+      <button class="wallet-btn">Pontem Aptos Wallet</button>
+      <button class="wallet-btn">Rainbow Wallet</button>
+      <button class="wallet-btn">Mycelium Wallet</button>
+      <button class="wallet-btn">Monerujo (Monero)</button>
+      <button class="wallet-btn">Unstoppable Wallet</button>
+      <button class="wallet-btn">Onchain Wallet</button>
+      <button class="wallet-btn">Zypto Wallet</button>
+      <button class="wallet-btn">Cypherock</button>
+      <button class="wallet-btn">BRD Wallet</button>
+      <button class="wallet-btn">Best Wallet</button>
+      <button class="wallet-btn">MathWallet</button>
+      <button class="wallet-btn">Blockstream BTC Wallet</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const modal = document.getElementById("walletModal");
+document.getElementById("connectBtn").onclick = () => modal.style.display = "flex";
+document.getElementById("moreBtn").onclick = () => {
+  document.getElementById("moreWallets").style.display = "block";
+  document.getElementById("moreBtn").style.display = "none";
+};
+// close modal when clicking outside
+window.onclick = e => { if(e.target == modal) modal.style.display = "none"; };
+</script>
+
+</body>
+</html>
