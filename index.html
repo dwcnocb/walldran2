@@ -2,42 +2,28 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>WalletConnect Demo</title>
+  <title>WalletConnect Test</title>
 </head>
 <body>
   <button id="connectBtn">Connect Wallet</button>
 
-  <!-- Load our script -->
-  <script type="module">
-    import { EthereumClient, w3mConnectors, w3mProvider } from "https://cdn.jsdelivr.net/npm/@web3modal/ethereum@3/dist/index.js";
-    import { Web3Modal } from "https://cdn.jsdelivr.net/npm/@web3modal/html@3/dist/index.js";
-    import { configureChains, createConfig } from "https://cdn.jsdelivr.net/npm/wagmi@1/dist/index.js";
-    import { mainnet } from "https://cdn.jsdelivr.net/npm/wagmi@1/chains.js";
+  <!-- WalletConnect Modal bundle -->
+  <script src="https://unpkg.com/@walletconnect/modal@2.6.2/dist/index.umd.js"></script>
+  <script>
+    const projectId = "685604db11bce85e357332363ed2a81f";
 
-    // 1. Get a free projectId from https://cloud.walletconnect.com
-    const projectId = "685604db11bce85e357332363ed2a81f";  // 🔑 Replace with your WalletConnect projectId
-
-    // 2. Configure chains
-    const chains = [mainnet];
-    const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
-
-    // 3. Setup wagmi config
-    const wagmiConfig = createConfig({
-      autoConnect: true,
-      connectors: w3mConnectors({ projectId, version: 2, chains }),
-      publicClient
+    const modal = new window.WalletConnectModal.WalletConnectModal({
+      projectId: projectId,
+      standaloneChains: ["eip155:1"], // Ethereum mainnet
     });
 
-    // 4. Setup Ethereum client
-    const ethereumClient = new EthereumClient(wagmiConfig, chains);
-
-    // 5. Create Web3Modal instance
-    const web3modal = new Web3Modal({ projectId }, ethereumClient);
-
-    // 6. Open modal on button click
-    document.getElementById("connectBtn").addEventListener("click", () => {
-      web3modal.openModal();
+    document.getElementById("connectBtn").addEventListener("click", async () => {
+      try {
+        const session = await modal.openModal();
+        console.log("Connected session:", session);
+      } catch (err) {
+        console.error("Connection error:", err);
+      }
     });
   </script>
 </body>
