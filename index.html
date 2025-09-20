@@ -1,82 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WalletConnect Button</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-        }
-        
-        #connectButton {
-            background-color: #3b82f6;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            font-size: 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        #connectButton:hover {
-            background-color: #2563eb;
-        }
-        
-        #connectButton:disabled {
-            background-color: #9ca3af;
-            cursor: not-allowed;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WalletConnect Button</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
+    
+    #connectButton {
+      background-color: #3b82f6;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    #connectButton:hover {
+      background-color: #2563eb;
+    }
+    
+    #connectButton:disabled {
+      background-color: #9ca3af;
+      cursor: not-allowed;
+    }
+
+    #status {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #333;
+    }
+  </style>
 </head>
 <body>
+  <div>
     <button id="connectButton">Connect Wallet</button>
+    <div id="status">Not connected</div>
+  </div>
 
-    <script type="module">
-        import { createWeb3Modal, defaultConfig } from 'https://cdnjs.cloudflare.com/ajax/libs/web3modal/4.1.11/index.js'
+  <script type="module">
+    import { createWeb3Modal, defaultConfig } from "https://esm.sh/@web3modal/html@4.1.11";
 
-        // Your WalletConnect project ID
-        const projectId = '685604db11bce85e357332363ed2a81f'
+    // ✅ Your WalletConnect Project ID
+    const projectId = "685604db11bce85e357332363ed2a81f";
 
-        // Define the chains you want to support
-        const mainnet = {
-            chainId: 1,
-            name: 'Ethereum',
-            currency: 'ETH',
-            explorerUrl: 'https://etherscan.io',
-            rpcUrl: 'https://cloudflare-eth.com'
-        }
+    // Define Ethereum mainnet chain
+    const mainnet = {
+      chainId: 1,
+      name: "Ethereum",
+      currency: "ETH",
+      explorerUrl: "https://etherscan.io",
+      rpcUrl: "https://cloudflare-eth.com"
+    };
 
-        // Create a metadata object
-        const metadata = {
-            name: 'My App',
-            description: 'My App description',
-            url: 'https://myapp.com',
-            icons: ['https://avatars.myapp.com/']
-        }
+    // App metadata
+    const metadata = {
+      name: "My App",
+      description: "My App description",
+      url: "https://example.org",
+      icons: ["https://walletconnect.com/walletconnect-logo.png"]
+    };
 
-        // Create the Web3Modal instance
-        const modal = createWeb3Modal({
-            projectId,
-            chains: [mainnet],
-            defaultConfig: defaultConfig({ metadata })
-        })
+    // Create the modal instance
+    const modal = createWeb3Modal({
+      projectId,
+      chains: [mainnet],
+      ...defaultConfig({ metadata })
+    });
 
-        // Add click event listener to the button
-        document.getElementById('connectButton').addEventListener('click', async () => {
-            try {
-                await modal.open()
-            } catch (error) {
-                console.error('Failed to open wallet modal:', error)
-            }
-        })
-    </script>
+    // Handle button click
+    const button = document.getElementById("connectButton");
+    const status = document.getElementById("status");
+
+    button.addEventListener("click", async () => {
+      try {
+        await modal.open(); // Opens the WalletConnect modal
+        status.textContent = "🔗 Modal opened – scan with your wallet";
+      } catch (error) {
+        console.error("Failed to open WalletConnect modal:", error);
+        status.textContent = "❌ Failed to open modal (check console)";
+      }
+    });
+  </script>
 </body>
 </html>
