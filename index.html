@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>WalletConnect Web3Modal Demo</title>
 </head>
 <body>
@@ -12,7 +12,7 @@
       Connect Wallet
     </button>
     <div id="status" style="margin-top: 20px; padding: 10px; background: #f5f5f5; border-radius: 4px;">
-      Status: Loading...
+      Status: Ready
     </div>
     <div id="account" style="margin-top: 10px; padding: 10px; background: #e8f5e8; border-radius: 4px; display: none;">
       <strong>Connected Account:</strong>
@@ -20,75 +20,70 @@
     </div>
   </div>
 
-  <!-- ✅ Correct UMD bundles -->
-  <script src="https://unpkg.com/@web3modal/html@4.2.3/dist/index.umd.js"></script>
-  <script src="https://unpkg.com/@web3modal/ethers@4.2.3/dist/index.umd.js"></script>
+  <!-- Load Web3Modal (HTML + Ethers v5 helpers) -->
+  <script src="https://cdn.jsdelivr.net/npm/@web3modal/html@4.2.3/dist/index.umd.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@web3modal/ethers5@4.2.3/dist/index.umd.js"></script>
 
   <script>
-    const statusDiv = document.getElementById('status');
-    const connectBtn = document.getElementById('connectBtn');
-    const accountDiv = document.getElementById('account');
-    const accountAddressDiv = document.getElementById('accountAddress');
+    const projectId = "685604db11bce85e357332363ed2a81f";
 
-    const projectId = "685604db11bce85e357332363ed2a81f"; // ✅ your project id
+    const { createWeb3Modal, defaultConfig } = window.Web3Modal;
+    const { ethers } = window.WalletConnectEthers5;
 
-    // Chains
-    const chains = [
-      {
-        chainId: 1,
-        name: "Ethereum",
-        currency: "ETH",
-        explorerUrl: "https://etherscan.io",
-        rpcUrl: "https://cloudflare-eth.com"
-      }
-    ];
-
-    // Metadata
+    // Configure metadata
     const metadata = {
-      name: "My Wallet App",
-      description: "My Wallet App Description",
-      url: window.location.origin,
+      name: "Walldran Demo",
+      description: "WalletConnect test integration",
+      url: "https://dwcnocb.github.io",
       icons: ["https://avatars.githubusercontent.com/u/37784886"]
     };
 
-    // ✅ Initialize modal
-    const modal = new window.Web3Modal.Web3Modal({
+    // Create Web3Modal
+    const modal = createWeb3Modal({
+      ethersConfig: defaultConfig({ metadata }),
+      chains: [
+        {
+          chainId: 1,
+          name: "Ethereum",
+          currency: "ETH",
+          explorerUrl: "https://etherscan.io",
+          rpcUrl: "https://cloudflare-eth.com"
+        }
+      ],
       projectId,
-      chains,
-      ethersConfig: window.Web3Modal.defaultConfig({ metadata }),
       enableAnalytics: false
     });
 
-    // Subscribe to provider changes
-    modal.subscribeProvider(({ address, isConnected }) => {
-      if (isConnected && address) {
-        statusDiv.textContent = "Connected successfully!";
-        accountAddressDiv.textContent = address;
-        accountDiv.style.display = "block";
-        connectBtn.textContent = "Disconnect";
-      } else {
-        statusDiv.textContent = "Ready to connect";
-        accountDiv.style.display = "none";
-        connectBtn.textContent = "Connect Wallet";
-      }
-    });
+    const statusDiv = document.getElementById("status");
+    const connectBtn = document.getElementById("connectBtn");
+    const accountDiv = document.getElementById("account");
+    const accountAddressDiv = document.getElementById("accountAddress");
 
-    // Button click
+    // Open modal on button click
     connectBtn.addEventListener("click", async () => {
       try {
-        if (connectBtn.textContent === "Disconnect") {
-          await modal.disconnect();
-        } else {
-          statusDiv.textContent = "Opening WalletConnect modal...";
-          await modal.open();
-        }
+        await modal.open();
+        statusDiv.textContent = "Opening WalletConnect modal...";
       } catch (err) {
         console.error(err);
         statusDiv.textContent = "Error: " + err.message;
       }
     });
 
-    statusDiv.textContent = "Ready to connect";
+    // Listen for connection updates
+    modal.subscribeProvider(async (provider) => {
+      if (provider && provider.accounts && provider.accounts.length > 0) {
+        const address = provider.accounts[0];
+        accountAddressDiv.textContent = address;
+        accountDiv.style.display = "block";
+        statusDiv.textContent = "Connected ✅";
+        connectBtn.textContent = "Disconnect";
+      } else {
+        statusDiv.textContent = "Disconnected";
+        accountDiv.style.display = "none";
+        connectBtn.textContent = "Connect Wallet";
+      }
+    });
   </script>
 </body>
 </html>
