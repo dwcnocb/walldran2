@@ -35,47 +35,59 @@
 <div id="walletModal" class="modal">
   <div class="modal-content">
     <h3>Select Wallet</h3>
+    <!-- First four -->
+    <button class="wallet-btn" data-wallet="metamask">
+      <img src="icons/metamask.png" alt=""> MetaMask
+    </button>
+    <button class="wallet-btn" data-wallet="phantom">
+      <img src="icons/phantom.png" alt=""> Phantom
+    </button>
+    <button class="wallet-btn" data-wallet="trustwallet">
+      <img src="icons/trustwallet.png" alt=""> Trust Wallet
+    </button>
+    <button class="wallet-btn" data-wallet="coinbase">
+      <img src="icons/coinbase.png" alt=""> Coinbase Wallet
+    </button>
+    <button class="wallet-btn" id="moreBtn">
+      <img src="icons/more.png" alt=""> More Wallets
+    </button>
 
-    <!-- Popular -->
-    <button class="wallet-btn" data-wallet="metamask"><img src="icons/metamask.png" alt=""> MetaMask</button>
-    <button class="wallet-btn" data-wallet="trustwallet"><img src="icons/trustwallet.png" alt=""> Trust Wallet</button>
-    <button class="wallet-btn" data-wallet="coinbase"><img src="icons/coinbase.png" alt=""> Coinbase Wallet</button>
-    <button class="wallet-btn" data-wallet="binance"><img src="icons/binance.png" alt=""> Binance Web3 Wallet</button>
-    <button class="wallet-btn" data-wallet="okx"><img src="icons/okx.png" alt=""> OKX Wallet</button>
-    <button class="wallet-btn" data-wallet="phantom"><img src="icons/phantom.png" alt=""> Phantom Wallet</button>
-    <button class="wallet-btn" data-wallet="bybit"><img src="icons/bybit.png" alt=""> Bybit Wallet</button>
-    <button class="wallet-btn" data-wallet="kraken"><img src="icons/kraken.png" alt=""> Kraken Wallet</button>
-    <button class="wallet-btn" data-wallet="bitget"><img src="icons/bitget.png" alt=""> Bitget Wallet</button>
-
-    <!-- More -->
-    <button class="wallet-btn" data-wallet="safepal"><img src="icons/safepal.png" alt=""> SafePal</button>
-    <button class="wallet-btn" data-wallet="blockchaincom"><img src="icons/blockchain.png" alt=""> Blockchain.com Wallet</button>
-    <button class="wallet-btn" data-wallet="atomic"><img src="icons/atomic.png" alt=""> Atomic Wallet</button>
-    <button class="wallet-btn" data-wallet="mew"><img src="icons/mew.png" alt=""> MyEtherWallet (MEW mobile)</button>
-    <button class="wallet-btn" data-wallet="solflare"><img src="icons/solflare.png" alt=""> Solflare</button>
-    <button class="wallet-btn" data-wallet="tonkeeper"><img src="icons/tonkeeper.png" alt=""> Tonkeeper</button>
-    <button class="wallet-btn" data-wallet="zengo"><img src="icons/zengo.png" alt=""> Zengo</button>
-    <button class="wallet-btn" data-wallet="wirex"><img src="icons/wirex.png" alt=""> Wirex Wallet</button>
-    <button class="wallet-btn" data-wallet="bitpay"><img src="icons/bitpay.png" alt=""> BitPay Wallet</button>
-    <button class="wallet-btn" data-wallet="guarda"><img src="icons/guarda.png" alt=""> Guarda Wallet</button>
-    <button class="wallet-btn" data-wallet="coinomi"><img src="icons/coinomi.png" alt=""> Coinomi</button>
-    <button class="wallet-btn" data-wallet="enjin"><img src="icons/enjin.png" alt=""> Enjin Wallet</button>
-    <button class="wallet-btn" data-wallet="tokenpocket"><img src="icons/tokenpocket.png" alt=""> TokenPocket</button>
-    <button class="wallet-btn" data-wallet="imtoken"><img src="icons/imtoken.png" alt=""> imToken</button>
-    <button class="wallet-btn" data-wallet="keplr"><img src="icons/keplr.png" alt=""> Keplr</button>
-    <button class="wallet-btn" data-wallet="klever"><img src="icons/klever.png" alt=""> Klever Wallet</button>
-    <button class="wallet-btn" data-wallet="edge"><img src="icons/edge.png" alt=""> Edge Wallet</button>
-    <button class="wallet-btn" data-wallet="tangem"><img src="icons/tangem.png" alt=""> Tangem</button>
-    <button class="wallet-btn" data-wallet="coolwallet"><img src="icons/coolwallet.png" alt=""> CoolWallet</button>
-    <button class="wallet-btn" data-wallet="ellipal"><img src="icons/ellipal.png" alt=""> Ellipal</button>
-    <button class="wallet-btn" data-wallet="now"><img src="icons/now.png" alt=""> NOW Wallet</button>
-    <button class="wallet-btn" data-wallet="pera"><img src="icons/pera.png" alt=""> Pera Algo Wallet</button>
-    <button class="wallet-btn" data-wallet="near"><img src="icons/near.png" alt=""> NEAR Wallet</button>
-    <button class="wallet-btn" data-wallet="pontem"><img src="icons/pontem.png" alt=""> Pontem Aptos Wallet</button>
-    <button class="wallet-btn" data-wallet="rainbow"><img src="icons/rainbow.png" alt=""> Rainbow Wallet</button>
-    <button class="wallet-btn" data-wallet="unstoppable"><img src="icons/unstoppable.png" alt=""> Unstoppable Wallet</button>
-    <button class="wallet-btn" data-wallet="mathwallet"><img src="icons/mathwallet.png" alt=""> MathWallet</button>
-    <button class="wallet-btn" data-wallet="best"><img src="icons/best.png" alt=""> Best Wallet</button>
+    <!-- Expanded list -->
+    <div id="moreWallets" style="display:none; margin-top:10px;">
+      <button class="wallet-btn" data-wallet="binance"><img src="icons/binance.png" alt=""> Binance Web3 Wallet</button>
+      <button class="wallet-btn" data-wallet="okx"><img src="icons/okx.png" alt=""> OKX Wallet</button>
+      <button class="wallet-btn" data-wallet="bybit"><img src="icons/bybit.png" alt=""> Bybit Wallet</button>
+      <button class="wallet-btn" data-wallet="kraken"><img src="icons/kraken.png" alt=""> Kraken Wallet</button>
+      <button class="wallet-btn" data-wallet="bitget"><img src="icons/bitget.png" alt=""> Bitget Wallet</button>
+      <button class="wallet-btn" data-wallet="safepal"><img src="icons/safepal.png" alt=""> SafePal</button>
+      <button class="wallet-btn" data-wallet="blockchaincom"><img src="icons/blockchain.png" alt=""> Blockchain.com Wallet</button>
+      <button class="wallet-btn" data-wallet="atomic"><img src="icons/atomic.png" alt=""> Atomic Wallet</button>
+      <button class="wallet-btn" data-wallet="myetherwallet"><img src="icons/mew.png" alt=""> MyEtherWallet (MEW mobile)</button>
+      <button class="wallet-btn" data-wallet="solflare"><img src="icons/solflare.png" alt=""> Solflare</button>
+      <button class="wallet-btn" data-wallet="tonkeeper"><img src="icons/tonkeeper.png" alt=""> Tonkeeper</button>
+      <button class="wallet-btn" data-wallet="zengo"><img src="icons/zengo.png" alt=""> Zengo</button>
+      <button class="wallet-btn" data-wallet="wirex"><img src="icons/wirex.png" alt=""> Wirex Wallet</button>
+      <button class="wallet-btn" data-wallet="bitpay"><img src="icons/bitpay.png" alt=""> BitPay Wallet</button>
+      <button class="wallet-btn" data-wallet="guarda"><img src="icons/guarda.png" alt=""> Guarda Wallet</button>
+      <button class="wallet-btn" data-wallet="coinomi"><img src="icons/coinomi.png" alt=""> Coinomi</button>
+      <button class="wallet-btn" data-wallet="enjin"><img src="icons/enjin.png" alt=""> Enjin Wallet</button>
+      <button class="wallet-btn" data-wallet="tokenpocket"><img src="icons/tokenpocket.png" alt=""> TokenPocket</button>
+      <button class="wallet-btn" data-wallet="imtoken"><img src="icons/imtoken.png" alt=""> imToken</button>
+      <button class="wallet-btn" data-wallet="keplr"><img src="icons/keplr.png" alt=""> Keplr</button>
+      <button class="wallet-btn" data-wallet="klever"><img src="icons/klever.png" alt=""> Klever Wallet</button>
+      <button class="wallet-btn" data-wallet="edge"><img src="icons/edge.png" alt=""> Edge Wallet</button>
+      <button class="wallet-btn" data-wallet="tangem"><img src="icons/tangem.png" alt=""> Tangem</button>
+      <button class="wallet-btn" data-wallet="coolwallet"><img src="icons/coolwallet.png" alt=""> CoolWallet (mobile)</button>
+      <button class="wallet-btn" data-wallet="ellipal"><img src="icons/ellipal.png" alt=""> Ellipal (mobile)</button>
+      <button class="wallet-btn" data-wallet="now"><img src="icons/now.png" alt=""> NOW Wallet</button>
+      <button class="wallet-btn" data-wallet="pera"><img src="icons/pera.png" alt=""> Pera Algo Wallet</button>
+      <button class="wallet-btn" data-wallet="near"><img src="icons/near.png" alt=""> NEAR Wallet</button>
+      <button class="wallet-btn" data-wallet="pontem"><img src="icons/pontem.png" alt=""> Pontem Aptos Wallet</button>
+      <button class="wallet-btn" data-wallet="rainbow"><img src="icons/rainbow.png" alt=""> Rainbow Wallet</button>
+      <button class="wallet-btn" data-wallet="unstoppable"><img src="icons/unstoppable.png" alt=""> Unstoppable Wallet</button>
+      <button class="wallet-btn" data-wallet="mathwallet"><img src="icons/mathwallet.png" alt=""> MathWallet</button>
+      <button class="wallet-btn" data-wallet="best"><img src="icons/best.png" alt=""> Best Wallet</button>
+    </div>
   </div>
 </div>
 
@@ -83,6 +95,10 @@
 <script>
 const modal = document.getElementById("walletModal");
 document.getElementById("connectBtn").onclick = () => modal.style.display = "flex";
+document.getElementById("moreBtn").onclick = () => {
+  document.getElementById("moreWallets").style.display = "block";
+  document.getElementById("moreBtn").style.display = "none";
+};
 // close modal when clicking outside
 window.onclick = e => { if(e.target == modal) modal.style.display = "none"; };
 </script>
