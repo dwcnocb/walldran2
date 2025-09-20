@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>WalletConnect Web3Modal Demo</title>
 </head>
 <body>
@@ -20,99 +20,75 @@
     </div>
   </div>
 
-  <!-- Load Web3Modal via script tags to avoid CORS issues -->
-  <script src="https://cdn.jsdelivr.net/npm/@web3modal/ethers5@4.2.3/dist/index.umd.js"></script>
-  
+  <!-- ✅ Correct UMD bundles -->
+  <script src="https://unpkg.com/@web3modal/html@4.2.3/dist/index.umd.js"></script>
+  <script src="https://unpkg.com/@web3modal/ethers@4.2.3/dist/index.umd.js"></script>
+
   <script>
     const statusDiv = document.getElementById('status');
     const connectBtn = document.getElementById('connectBtn');
     const accountDiv = document.getElementById('account');
     const accountAddressDiv = document.getElementById('accountAddress');
-    
-    let modal;
-    let provider;
-    
-    // Initialize Web3Modal
-    async function initWeb3Modal() {
-      try {
-        statusDiv.textContent = 'Initializing Web3Modal...';
-        
-        // Your project ID
-        const projectId = '685604db11bce85e357332363ed2a81f';
-        
-        // Chain configuration
-        const ethereum = {
-          chainId: 1,
-          name: 'Ethereum',
-          currency: 'ETH',
-          explorerUrl: 'https://etherscan.io',
-          rpcUrl: 'https://cloudflare-eth.com'
-        };
-        
-        // Metadata
-        const metadata = {
-          name: 'My Wallet App',
-          description: 'My Wallet App Description',
-          url: window.location.href,
-          icons: ['https://avatars.githubusercontent.com/u/37784886']
-        };
-        
-        // Create Web3Modal instance
-        modal = Web3Modal.createWeb3Modal({
-          ethersConfig: Web3Modal.defaultConfig({
-            metadata,
-            defaultChainId: 1,
-            rpcUrl: 'https://cloudflare-eth.com'
-          }),
-          chains: [ethereum],
-          projectId,
-          enableAnalytics: false
-        });
-        
-        // Subscribe to modal events
-        modal.subscribeProvider(({ address, chainId, isConnected }) => {
-          if (isConnected && address) {
-            statusDiv.textContent = 'Connected successfully!';
-            accountAddressDiv.textContent = address;
-            accountDiv.style.display = 'block';
-            connectBtn.textContent = 'Disconnect';
-          } else {
-            statusDiv.textContent = 'Ready to connect';
-            accountDiv.style.display = 'none';
-            connectBtn.textContent = 'Connect Wallet';
-          }
-        });
-        
-        statusDiv.textContent = 'Ready to connect';
-        
-      } catch (error) {
-        console.error('Initialization error:', error);
-        statusDiv.textContent = 'Error: ' + error.message;
+
+    const projectId = "685604db11bce85e357332363ed2a81f"; // ✅ your project id
+
+    // Chains
+    const chains = [
+      {
+        chainId: 1,
+        name: "Ethereum",
+        currency: "ETH",
+        explorerUrl: "https://etherscan.io",
+        rpcUrl: "https://cloudflare-eth.com"
       }
-    }
-    
-    // Button click handler
-    connectBtn.addEventListener('click', async () => {
-      try {
-        if (!modal) {
-          statusDiv.textContent = 'Please wait, initializing...';
-          return;
-        }
-        
-        if (connectBtn.textContent === 'Disconnect') {
-          await modal.disconnect();
-        } else {
-          statusDiv.textContent = 'Opening wallet connection...';
-          await modal.open();
-        }
-      } catch (error) {
-        console.error('Connection error:', error);
-        statusDiv.textContent = 'Error: ' + error.message;
+    ];
+
+    // Metadata
+    const metadata = {
+      name: "My Wallet App",
+      description: "My Wallet App Description",
+      url: window.location.origin,
+      icons: ["https://avatars.githubusercontent.com/u/37784886"]
+    };
+
+    // ✅ Initialize modal
+    const modal = new window.Web3Modal.Web3Modal({
+      projectId,
+      chains,
+      ethersConfig: window.Web3Modal.defaultConfig({ metadata }),
+      enableAnalytics: false
+    });
+
+    // Subscribe to provider changes
+    modal.subscribeProvider(({ address, isConnected }) => {
+      if (isConnected && address) {
+        statusDiv.textContent = "Connected successfully!";
+        accountAddressDiv.textContent = address;
+        accountDiv.style.display = "block";
+        connectBtn.textContent = "Disconnect";
+      } else {
+        statusDiv.textContent = "Ready to connect";
+        accountDiv.style.display = "none";
+        connectBtn.textContent = "Connect Wallet";
       }
     });
-    
-    // Initialize when page loads
-    window.addEventListener('load', initWeb3Modal);
+
+    // Button click
+    connectBtn.addEventListener("click", async () => {
+      try {
+        if (connectBtn.textContent === "Disconnect") {
+          await modal.disconnect();
+        } else {
+          statusDiv.textContent = "Opening WalletConnect modal...";
+          await modal.open();
+        }
+      } catch (err) {
+        console.error(err);
+        statusDiv.textContent = "Error: " + err.message;
+      }
+    });
+
+    statusDiv.textContent = "Ready to connect";
   </script>
 </body>
 </html>
