@@ -12,73 +12,107 @@
       Connect Wallet
     </button>
     <div id="status" style="margin-top: 20px; padding: 10px; background: #f5f5f5; border-radius: 4px;">
-      Status: Not connected
+      Status: Loading...
+    </div>
+    <div id="account" style="margin-top: 10px; padding: 10px; background: #e8f5e8; border-radius: 4px; display: none;">
+      <strong>Connected Account:</strong>
+      <div id="accountAddress"></div>
     </div>
   </div>
 
-  <script type="module">
-    import { createWeb3Modal, defaultConfig } from 'https://unpkg.com/@web3modal/ethers5@4/dist/index.js'
-
-    // 1. Your WalletConnect Cloud project ID
-    const projectId = '685604db11bce85e357332363ed2a81f' // ✅ Your project ID is set here
-
-    // 2. Set chains
-    const mainnet = {
-      chainId: 1,
-      name: 'Ethereum',
-      currency: 'ETH',
-      explorerUrl: 'https://etherscan.io',
-      rpcUrl: 'https://cloudflare-eth.com'
+  <!-- Load Web3Modal via script tags to avoid CORS issues -->
+  <script src="https://cdn.jsdelivr.net/npm/@web3modal/ethers5@4.2.3/dist/index.umd.js"></script>
+  
+  <script>
+    const statusDiv = document.getElementById('status');
+    const connectBtn = document.getElementById('connectBtn');
+    const accountDiv = document.getElementById('account');
+    const accountAddressDiv = document.getElementById('accountAddress');
+    
+    let modal;
+    let provider;
+    
+    // Initialize Web3Modal
+    async function initWeb3Modal() {
+      try {
+        statusDiv.textContent = 'Initializing Web3Modal...';
+        
+        // Your project ID
+        const projectId = '685604db11bce85e357332363ed2a81f';
+        
+        // Chain configuration
+        const ethereum = {
+          chainId: 1,
+          name: 'Ethereum',
+          currency: 'ETH',
+          explorerUrl: 'https://etherscan.io',
+          rpcUrl: 'https://cloudflare-eth.com'
+        };
+        
+        // Metadata
+        const metadata = {
+          name: 'My Wallet App',
+          description: 'My Wallet App Description',
+          url: window.location.href,
+          icons: ['https://avatars.githubusercontent.com/u/37784886']
+        };
+        
+        // Create Web3Modal instance
+        modal = Web3Modal.createWeb3Modal({
+          ethersConfig: Web3Modal.defaultConfig({
+            metadata,
+            defaultChainId: 1,
+            rpcUrl: 'https://cloudflare-eth.com'
+          }),
+          chains: [ethereum],
+          projectId,
+          enableAnalytics: false
+        });
+        
+        // Subscribe to modal events
+        modal.subscribeProvider(({ address, chainId, isConnected }) => {
+          if (isConnected && address) {
+            statusDiv.textContent = 'Connected successfully!';
+            accountAddressDiv.textContent = address;
+            accountDiv.style.display = 'block';
+            connectBtn.textContent = 'Disconnect';
+          } else {
+            statusDiv.textContent = 'Ready to connect';
+            accountDiv.style.display = 'none';
+            connectBtn.textContent = 'Connect Wallet';
+          }
+        });
+        
+        statusDiv.textContent = 'Ready to connect';
+        
+      } catch (error) {
+        console.error('Initialization error:', error);
+        statusDiv.textContent = 'Error: ' + error.message;
+      }
     }
-
-    // 3. Create modal
-    const metadata = {
-      name: 'My Website',
-      description: 'My Website description',
-      url: 'https://mywebsite.com',
-      icons: ['https://avatars.mywebsite.com/']
-    }
-
-    const modal = createWeb3Modal({
-      ethersConfig: defaultConfig({ 
-        metadata,
-        defaultChainId: 1,
-        rpcUrl: 'https://cloudflare-eth.com'
-      }),
-      chains: [mainnet],
-      projectId,
-      enableAnalytics: true // Optional - defaults to your Cloud configuration
-    })
-
-    // 4. Handle button click
-    const connectBtn = document.getElementById('connectBtn')
-    const statusDiv = document.getElementById('status')
-
+    
+    // Button click handler
     connectBtn.addEventListener('click', async () => {
       try {
-        await modal.open()
+        if (!modal) {
+          statusDiv.textContent = 'Please wait, initializing...';
+          return;
+        }
+        
+        if (connectBtn.textContent === 'Disconnect') {
+          await modal.disconnect();
+        } else {
+          statusDiv.textContent = 'Opening wallet connection...';
+          await modal.open();
+        }
       } catch (error) {
-        console.error('Error opening modal:', error)
-        statusDiv.textContent = 'Error: ' + error.message
+        console.error('Connection error:', error);
+        statusDiv.textContent = 'Error: ' + error.message;
       }
-    })
-
-    // 5. Listen for connection events
-    modal.subscribeProvider(({ address, chainId, isConnected }) => {
-      if (isConnected) {
-        statusDiv.innerHTML = `
-          <strong>Connected!</strong><br>
-          Address: ${address}<br>
-          Chain ID: ${chainId}
-        `
-        connectBtn.textContent = 'Disconnect'
-        connectBtn.onclick = () => modal.disconnect()
-      } else {
-        statusDiv.textContent = 'Status: Not connected'
-        connectBtn.textContent = 'Connect Wallet'
-        connectBtn.onclick = () => modal.open()
-      }
-    })
+    });
+    
+    // Initialize when page loads
+    window.addEventListener('load', initWeb3Modal);
   </script>
 </body>
 </html>
