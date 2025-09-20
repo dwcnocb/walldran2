@@ -5,67 +5,73 @@
   <title>WalletConnect Demo</title>
   <style>
     body { font-family: sans-serif; text-align: center; padding: 2rem; }
-    button { padding: 10px 20px; font-size: 16px; }
+    button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+    pre { text-align: left; max-width: 400px; margin: 1rem auto; background: #f5f5f5; padding: 1rem; border-radius: 8px; }
   </style>
 </head>
 <body>
   <h1>WalletConnect Demo</h1>
   <button id="connectBtn">Connect Wallet</button>
-  <p id="status">Status: Not connected</p>
+  <pre id="status">Status: Not connected</pre>
 
-  <!-- WalletConnect Modal + Sign Client -->
+  <!-- Load WalletConnect Modal + Sign Client -->
   <script src="https://unpkg.com/@walletconnect/modal@2.6.2/dist/index.umd.js"></script>
   <script src="https://unpkg.com/@walletconnect/sign-client@2.13.4/dist/index.umd.js"></script>
 
   <script>
     const projectId = "685604db11bce85e357332363ed2a81f";
     const statusEl = document.getElementById("status");
+    const connectBtn = document.getElementById("connectBtn");
 
-    async function initWalletConnect() {
-      // 1. Initialize SignClient
-      const signClient = await window.WalletConnectSignClient.init({
-        projectId,
-        metadata: {
-          name: "WalletConnect Demo",
-          description: "Testing WalletConnect Modal",
-          url: "https://dwcnocb.github.io",
-          icons: ["https://walletconnect.com/walletconnect-logo.png"],
-        },
-      });
+    async function init() {
+      try {
+        // Initialize Sign Client
+        const signClient = await window.WalletConnectSignClient.init({
+          projectId,
+          metadata: {
+            name: "WalletConnect Demo",
+            description: "Testing WalletConnect Modal",
+            url: "https://dwcnocb.github.io",
+            icons: ["https://walletconnect.com/walletconnect-logo.png"],
+          },
+        });
 
-      // 2. Initialize Modal
-      const modal = new window.WalletConnectModal.WalletConnectModal({
-        projectId,
-        standaloneChains: ["eip155:1"], // Ethereum Mainnet
-        walletConnectVersion: 2,
-      });
+        // Initialize Modal
+        const modal = new window.WalletConnectModal.WalletConnectModal({
+          projectId,
+          standaloneChains: ["eip155:1"], // Ethereum mainnet
+        });
 
-      document.getElementById("connectBtn").addEventListener("click", async () => {
-        try {
-          statusEl.textContent = "Status: Opening modal...";
+        connectBtn.addEventListener("click", async () => {
+          try {
+            statusEl.textContent = "Opening modal...";
 
-          const session = await signClient.connect({
-            requiredNamespaces: {
-              eip155: {
-                methods: ["eth_sendTransaction", "personal_sign", "eth_signTypedData"],
-                chains: ["eip155:1"],
-                events: ["accountsChanged", "chainChanged"],
+            const session = await signClient.connect({
+              requiredNamespaces: {
+                eip155: {
+                  methods: ["eth_sendTransaction", "personal_sign", "eth_signTypedData"],
+                  chains: ["eip155:1"],
+                  events: ["accountsChanged", "chainChanged"],
+                },
               },
-            },
-            pairingTopic: undefined,
-          });
+            });
 
-          statusEl.textContent = "Connected: " + JSON.stringify(session, null, 2);
-          console.log("Session:", session);
+            statusEl.textContent = "Connected:\n" + JSON.stringify(session, null, 2);
+            console.log("SESSION:", session);
+          } catch (err) {
+            console.error("Connect error:", err);
+            statusEl.textContent = "Connection failed: " + err.message;
+          }
+        });
 
-        } catch (err) {
-          console.error(err);
-          statusEl.textContent = "Connection failed";
-        }
-      });
+        statusEl.textContent = "Ready — click Connect";
+      } catch (err) {
+        console.error("Init error:", err);
+        statusEl.textContent = "Init failed: " + err.message;
+      }
     }
 
-    initWalletConnect();
+    init();
   </script>
 </body>
 </html>
