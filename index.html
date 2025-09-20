@@ -1,94 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>WalletConnect v2 Example</title>
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-  <script type="module">
-    import { EthereumProvider } from "https://esm.sh/@walletconnect/ethereum-provider@2.11.1";
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WalletConnect Button</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        
+        #connectButton {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        #connectButton:hover {
+            background-color: #2563eb;
+        }
+        
+        #connectButton:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <button id="connectButton">Connect Wallet</button>
 
-    const projectId = "685604db11bce85e357332363ed2a81f"; // ✅ your Project ID
-    let provider;
-    let web3Provider;
-    let signer;
-    let address;
+    <script type="module">
+        import { createWeb3Modal, defaultConfig } from 'https://cdnjs.cloudflare.com/ajax/libs/web3modal/4.1.11/index.js'
 
-    async function connectWallet() {
-      try {
-        // If already connected → disconnect
-        if (provider && provider.session) {
-          await provider.disconnect();
-          provider = null;
-          web3Provider = null;
-          signer = null;
-          address = null;
-          updateUI();
-          return;
+        // Your WalletConnect project ID
+        const projectId = '685604db11bce85e357332363ed2a81f'
+
+        // Define the chains you want to support
+        const mainnet = {
+            chainId: 1,
+            name: 'Ethereum',
+            currency: 'ETH',
+            explorerUrl: 'https://etherscan.io',
+            rpcUrl: 'https://cloudflare-eth.com'
         }
 
-        // Initialize WalletConnect Ethereum provider
-        provider = await EthereumProvider.init({
-          projectId,
-          chains: [1], // Ethereum mainnet
-          showQrModal: true, // ✅ Let WalletConnect open its modal automatically
-          rpcMap: {
-            1: "https://rpc.ankr.com/eth"
-          },
-          metadata: {
-            name: "Demo DApp",
-            description: "WalletConnect v2 Example",
-            url: "https://example.org",
-            icons: ["https://walletconnect.com/walletconnect-logo.png"]
-          }
-        });
+        // Create a metadata object
+        const metadata = {
+            name: 'My App',
+            description: 'My App description',
+            url: 'https://myapp.com',
+            icons: ['https://avatars.myapp.com/']
+        }
 
-        // Trigger the modal + connect
-        await provider.connect();
+        // Create the Web3Modal instance
+        const modal = createWeb3Modal({
+            projectId,
+            chains: [mainnet],
+            defaultConfig: defaultConfig({ metadata })
+        })
 
-        // Wrap with ethers.js
-        web3Provider = new ethers.providers.Web3Provider(provider);
-        signer = web3Provider.getSigner();
-        address = await signer.getAddress();
-
-        updateUI();
-
-        // Handle disconnect
-        provider.on("disconnect", () => {
-          provider = null;
-          web3Provider = null;
-          signer = null;
-          address = null;
-          updateUI();
-        });
-
-      } catch (err) {
-        console.error("❌ WalletConnect Error:", err);
-        alert("Connection failed. Check console for details.");
-      }
-    }
-
-    function updateUI() {
-      const btn = document.getElementById("connectBtn");
-      const addrDiv = document.getElementById("address");
-      if (address) {
-        btn.textContent = "Disconnect Wallet";
-        addrDiv.textContent = "✅ Connected: " + address;
-      } else {
-        btn.textContent = "Connect with WalletConnect";
-        addrDiv.textContent = "Not connected";
-      }
-    }
-
-    window.addEventListener("DOMContentLoaded", () => {
-      document.getElementById("connectBtn").addEventListener("click", connectWallet);
-      updateUI();
-    });
-  </script>
-</head>
-<body style="display:flex;flex-direction:column;justify-content:center;align-items:center;height:100vh;background:#f0f2f5;font-family:sans-serif;">
-  <button id="connectBtn" style="padding:15px 25px;font-size:18px;border:none;border-radius:8px;background:#3b82f6;color:#fff;cursor:pointer;margin-bottom:20px;">
-    Connect with WalletConnect
-  </button>
-  <div id="address" style="font-size:16px;color:#333;">Not connected</div>
+        // Add click event listener to the button
+        document.getElementById('connectButton').addEventListener('click', async () => {
+            try {
+                await modal.open()
+            } catch (error) {
+                console.error('Failed to open wallet modal:', error)
+            }
+        })
+    </script>
 </body>
 </html>
