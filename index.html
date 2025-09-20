@@ -4,75 +4,55 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>WalletConnect Demo</title>
-  <style>
-    body { font-family: sans-serif; text-align: center; padding: 2rem; }
-    button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
-    pre { text-align: left; max-width: 400px; margin: 1rem auto; background: #f5f5f5; padding: 1rem; border-radius: 8px; }
-  </style>
 </head>
 <body>
   <h1>WalletConnect Demo</h1>
   <button id="connectBtn">Connect Wallet</button>
-  <pre id="status">Status: Not connected</pre>
+  <p id="status">Status: Not connected</p>
+  <p id="account"></p>
 
-  <!-- WalletConnect UMD bundles -->
-  <script src="https://unpkg.com/@walletconnect/sign-client@2.13.4/dist/index.umd.js"></script>
-  <script src="https://unpkg.com/@walletconnect/modal@2.6.2/dist/index.umd.js"></script>
+  <!-- Web3Modal (latest) -->
+  <script src="https://unpkg.com/@web3modal/html@4.2.3/dist/index.js"></script>
+  <script src="https://unpkg.com/@web3modal/ethereum@4.2.3/dist/index.js"></script>
 
   <script>
     const projectId = "685604db11bce85e357332363ed2a81f";
-    const statusEl = document.getElementById("status");
-    const connectBtn = document.getElementById("connectBtn");
 
-    async function init() {
-      try {
-        // Correct global from sign-client UMD is `WalletConnectSignClient`
-        const signClient = await WalletConnectSignClient.init({
-          projectId,
-          metadata: {
-            name: "WalletConnect Demo",
-            description: "Testing WalletConnect Modal",
-            url: "https://dwcnocb.github.io",
-            icons: ["https://walletconnect.com/walletconnect-logo.png"],
-          },
-        });
+    // 1. Define chains
+    const { mainnet } = window.WalletConnectEthereumChains;
 
-        // Modal instance
-        const modal = new WalletConnectModal.WalletConnectModal({
-          projectId,
-          standaloneChains: ["eip155:1"], // Ethereum mainnet
-        });
-
-        connectBtn.addEventListener("click", async () => {
-          try {
-            statusEl.textContent = "Opening WalletConnect modal...";
-
-            const session = await signClient.connect({
-              requiredNamespaces: {
-                eip155: {
-                  methods: ["eth_sendTransaction", "personal_sign", "eth_signTypedData"],
-                  chains: ["eip155:1"],
-                  events: ["accountsChanged", "chainChanged"],
-                },
-              },
-            });
-
-            statusEl.textContent = "✅ Connected:\n" + JSON.stringify(session, null, 2);
-            console.log("SESSION:", session);
-          } catch (err) {
-            console.error("Connect error:", err);
-            statusEl.textContent = "❌ Connection failed: " + err.message;
-          }
-        });
-
-        statusEl.textContent = "Ready — click Connect Wallet";
-      } catch (err) {
-        console.error("Init error:", err);
-        statusEl.textContent = "❌ Init failed: " + err.message;
+    // 2. Create Ethereum client
+    const ethereumClient = new window.WalletConnectEthereum.EthereumClient(
+      {
+        chains: [mainnet],
+        projectId
       }
-    }
+    );
 
-    init();
+    // 3. Create Web3Modal
+    const modal = new window.Web3Modal.Web3Modal({
+      projectId,
+      chains: [mainnet],
+      themeMode: "light"
+    }, ethereumClient);
+
+    // 4. Button handler
+    const connectBtn = document.getElementById("connectBtn");
+    const status = document.getElementById("status");
+    const account = document.getElementById("account");
+
+    connectBtn.addEventListener("click", async () => {
+      try {
+        await modal.open();
+        const provider = await ethereumClient.getProvider();
+        const accounts = await provider.request({ method: "eth_requestAccounts" });
+        status.textContent = "✅ Connected!";
+        account.textContent = "Account: " + accounts[0];
+      } catch (err) {
+        console.error(err);
+        status.textContent = "❌ Connection failed: " + err.message;
+      }
+    });
   </script>
 </body>
 </html>
