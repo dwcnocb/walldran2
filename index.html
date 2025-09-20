@@ -2,88 +2,70 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>WalletConnect Web3Modal Demo</title>
+  <title>WalletConnect Demo</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 2rem; }
+    button { padding: 10px 20px; font-size: 16px; }
+  </style>
 </head>
 <body>
-  <div style="padding: 20px; font-family: Arial, sans-serif;">
-    <h1>WalletConnect Demo</h1>
-    <button id="connectBtn" style="padding: 12px 24px; background: #4CAF50; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
-      Connect Wallet
-    </button>
-    <div id="status" style="margin-top: 20px; padding: 10px; background: #f5f5f5; border-radius: 4px;">
-      Status: Ready
-    </div>
-    <div id="account" style="margin-top: 10px; padding: 10px; background: #e8f5e8; border-radius: 4px; display: none;">
-      <strong>Connected Account:</strong>
-      <div id="accountAddress"></div>
-    </div>
-  </div>
+  <h1>WalletConnect Demo</h1>
+  <button id="connectBtn">Connect Wallet</button>
+  <p id="status">Status: Not connected</p>
 
-  <!-- Load Web3Modal (HTML + Ethers v5 helpers) -->
-  <script src="https://cdn.jsdelivr.net/npm/@web3modal/html@4.2.3/dist/index.umd.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@web3modal/ethers5@4.2.3/dist/index.umd.js"></script>
+  <!-- WalletConnect Modal + Sign Client -->
+  <script src="https://unpkg.com/@walletconnect/modal@2.6.2/dist/index.umd.js"></script>
+  <script src="https://unpkg.com/@walletconnect/sign-client@2.13.4/dist/index.umd.js"></script>
 
   <script>
     const projectId = "685604db11bce85e357332363ed2a81f";
+    const statusEl = document.getElementById("status");
 
-    const { createWeb3Modal, defaultConfig } = window.Web3Modal;
-    const { ethers } = window.WalletConnectEthers5;
+    async function initWalletConnect() {
+      // 1. Initialize SignClient
+      const signClient = await window.WalletConnectSignClient.init({
+        projectId,
+        metadata: {
+          name: "WalletConnect Demo",
+          description: "Testing WalletConnect Modal",
+          url: "https://dwcnocb.github.io",
+          icons: ["https://walletconnect.com/walletconnect-logo.png"],
+        },
+      });
 
-    // Configure metadata
-    const metadata = {
-      name: "Walldran Demo",
-      description: "WalletConnect test integration",
-      url: "https://dwcnocb.github.io",
-      icons: ["https://avatars.githubusercontent.com/u/37784886"]
-    };
+      // 2. Initialize Modal
+      const modal = new window.WalletConnectModal.WalletConnectModal({
+        projectId,
+        standaloneChains: ["eip155:1"], // Ethereum Mainnet
+        walletConnectVersion: 2,
+      });
 
-    // Create Web3Modal
-    const modal = createWeb3Modal({
-      ethersConfig: defaultConfig({ metadata }),
-      chains: [
-        {
-          chainId: 1,
-          name: "Ethereum",
-          currency: "ETH",
-          explorerUrl: "https://etherscan.io",
-          rpcUrl: "https://cloudflare-eth.com"
+      document.getElementById("connectBtn").addEventListener("click", async () => {
+        try {
+          statusEl.textContent = "Status: Opening modal...";
+
+          const session = await signClient.connect({
+            requiredNamespaces: {
+              eip155: {
+                methods: ["eth_sendTransaction", "personal_sign", "eth_signTypedData"],
+                chains: ["eip155:1"],
+                events: ["accountsChanged", "chainChanged"],
+              },
+            },
+            pairingTopic: undefined,
+          });
+
+          statusEl.textContent = "Connected: " + JSON.stringify(session, null, 2);
+          console.log("Session:", session);
+
+        } catch (err) {
+          console.error(err);
+          statusEl.textContent = "Connection failed";
         }
-      ],
-      projectId,
-      enableAnalytics: false
-    });
+      });
+    }
 
-    const statusDiv = document.getElementById("status");
-    const connectBtn = document.getElementById("connectBtn");
-    const accountDiv = document.getElementById("account");
-    const accountAddressDiv = document.getElementById("accountAddress");
-
-    // Open modal on button click
-    connectBtn.addEventListener("click", async () => {
-      try {
-        await modal.open();
-        statusDiv.textContent = "Opening WalletConnect modal...";
-      } catch (err) {
-        console.error(err);
-        statusDiv.textContent = "Error: " + err.message;
-      }
-    });
-
-    // Listen for connection updates
-    modal.subscribeProvider(async (provider) => {
-      if (provider && provider.accounts && provider.accounts.length > 0) {
-        const address = provider.accounts[0];
-        accountAddressDiv.textContent = address;
-        accountDiv.style.display = "block";
-        statusDiv.textContent = "Connected ✅";
-        connectBtn.textContent = "Disconnect";
-      } else {
-        statusDiv.textContent = "Disconnected";
-        accountDiv.style.display = "none";
-        connectBtn.textContent = "Connect Wallet";
-      }
-    });
+    initWalletConnect();
   </script>
 </body>
 </html>
