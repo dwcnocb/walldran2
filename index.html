@@ -11,46 +11,55 @@
   <p id="status">Status: Not connected</p>
   <p id="account"></p>
 
-  <!-- Web3Modal (latest) -->
-  <script src="https://unpkg.com/@web3modal/html@4.2.3/dist/index.js"></script>
-  <script src="https://unpkg.com/@web3modal/ethereum@4.2.3/dist/index.js"></script>
+  <!-- Load React + ReactDOM (needed for wagmi/web3modal) -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 
-  <script>
+  <!-- Load wagmi + viem + web3modal -->
+  <script src="https://unpkg.com/viem@2.9.3/dist/viem.min.js"></script>
+  <script src="https://unpkg.com/wagmi@2.13.0/dist/wagmi.min.js"></script>
+  <script src="https://unpkg.com/@web3modal/wagmi@4.2.3/dist/index.umd.js"></script>
+
+  <div id="app"></div>
+
+  <script type="text/javascript">
+    const { createWeb3Modal } = window.Web3ModalWagmi;
+    const { configureChains, createConfig, WagmiConfig } = window.wagmi;
+    const { mainnet } = window.wagmi.chains;
+    const { jsonRpcProvider } = window.wagmi.providers;
+
+    // Replace with your WalletConnect ProjectId
     const projectId = "685604db11bce85e357332363ed2a81f";
 
-    // 1. Define chains
-    const { mainnet } = window.WalletConnectEthereumChains;
+    // 1. Configure chains + provider
+    const config = window.wagmi.createConfig({
+      autoConnect: true,
+      connectors: window.Web3ModalWagmi.defaultWagmiConnectors({ chains: [mainnet], projectId }),
+      publicClient: window.viem.createPublicClient({ chain: mainnet, transport: window.viem.http() })
+    });
 
-    // 2. Create Ethereum client
-    const ethereumClient = new window.WalletConnectEthereum.EthereumClient(
-      {
-        chains: [mainnet],
-        projectId
-      }
-    );
-
-    // 3. Create Web3Modal
-    const modal = new window.Web3Modal.Web3Modal({
+    // 2. Create modal
+    const modal = createWeb3Modal({
+      wagmiConfig: config,
       projectId,
       chains: [mainnet],
-      themeMode: "light"
-    }, ethereumClient);
+      defaultChain: mainnet
+    });
 
-    // 4. Button handler
-    const connectBtn = document.getElementById("connectBtn");
+    // 3. Hook up button
+    const btn = document.getElementById("connectBtn");
     const status = document.getElementById("status");
     const account = document.getElementById("account");
 
-    connectBtn.addEventListener("click", async () => {
+    btn.addEventListener("click", async () => {
       try {
         await modal.open();
-        const provider = await ethereumClient.getProvider();
-        const accounts = await provider.request({ method: "eth_requestAccounts" });
-        status.textContent = "✅ Connected!";
-        account.textContent = "Account: " + accounts[0];
+        const [address] = await config.publicClient.request({ method: "eth_requestAccounts" });
+        status.textContent = "✅ Connected";
+        account.textContent = "Account: " + address;
       } catch (err) {
         console.error(err);
-        status.textContent = "❌ Connection failed: " + err.message;
+        status.textContent = "❌ " + err.message;
       }
     });
   </script>
