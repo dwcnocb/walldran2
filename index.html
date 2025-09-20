@@ -2,45 +2,51 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>WalletConnect Modal Test</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>WalletConnect Web3Modal Demo</title>
 </head>
 <body>
   <button id="connectBtn">Connect Wallet</button>
 
-  <!-- Load WalletConnect Modal -->
-  <script src="https://unpkg.com/@walletconnect/modal@2.6.2/dist/index.umd.js"></script>
-  <script>
+  <script type="module">
+    import { EthereumClient, w3mConnectors, w3mProvider } from "https://unpkg.com/@web3modal/ethereum@3/dist/index.js";
+    import { Web3Modal } from "https://unpkg.com/@web3modal/html@3/dist/index.js";
+    import { configureChains, createConfig } from "https://unpkg.com/wagmi@1/dist/index.js";
+    import { mainnet } from "https://unpkg.com/wagmi@1/chains.js";
+
+    // 🔑 Your WalletConnect projectId
     const projectId = "685604db11bce85e357332363ed2a81f";
 
-    // ✅ Correct way: Use WalletConnectModalSign
-    const modal = new window.WalletConnectModalSign.WalletConnectModalSign({
-      projectId: projectId,
-      metadata: {
-        name: "My Dapp",
-        description: "Demo dapp with WalletConnect",
-        url: "https://your-dapp-url.com",
-        icons: ["https://walletconnect.com/walletconnect-logo.png"],
-      },
+    // 1. Configure chains (Ethereum mainnet here)
+    const chains = [mainnet];
+    const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
+
+    // 2. Setup wagmi config
+    const wagmiConfig = createConfig({
+      autoConnect: true,
+      connectors: w3mConnectors({ projectId, version: 2, chains }),
+      publicClient
     });
 
-    document.getElementById("connectBtn").addEventListener("click", async () => {
-      try {
-        const session = await modal.connect({
-          requiredNamespaces: {
-            eip155: {
-              methods: ["eth_sendTransaction", "personal_sign", "eth_signTypedData"],
-              chains: ["eip155:1"],
-              events: ["accountsChanged", "chainChanged"],
-            },
-          },
-        });
+    // 3. Setup Ethereum client
+    const ethereumClient = new EthereumClient(wagmiConfig, chains);
 
-        console.log("✅ Connected:", session);
-        alert("Wallet connected!");
-      } catch (err) {
-        console.error("❌ Connection error:", err);
-        alert("Wallet not found or connection rejected");
-      }
+    // 4. Setup Web3Modal
+    const web3modal = new Web3Modal(
+      {
+        projectId,
+        themeMode: "light",
+        themeVariables: {
+          "--w3m-accent-color": "#4CAF50",
+          "--w3m-background-color": "#fff"
+        }
+      },
+      ethereumClient
+    );
+
+    // 5. On button click, open modal
+    document.getElementById("connectBtn").addEventListener("click", () => {
+      web3modal.openModal();
     });
   </script>
 </body>
