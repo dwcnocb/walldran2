@@ -6,48 +6,79 @@
   <title>WalletConnect Web3Modal Demo</title>
 </head>
 <body>
-  <button id="connectBtn">Connect Wallet</button>
+  <div style="padding: 20px; font-family: Arial, sans-serif;">
+    <h1>WalletConnect Demo</h1>
+    <button id="connectBtn" style="padding: 12px 24px; background: #4CAF50; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px;">
+      Connect Wallet
+    </button>
+    <div id="status" style="margin-top: 20px; padding: 10px; background: #f5f5f5; border-radius: 4px;">
+      Status: Not connected
+    </div>
+  </div>
 
   <script type="module">
-    import { EthereumClient, w3mConnectors, w3mProvider } from "https://unpkg.com/@web3modal/ethereum@3/dist/index.js";
-    import { Web3Modal } from "https://unpkg.com/@web3modal/html@3/dist/index.js";
-    import { configureChains, createConfig } from "https://unpkg.com/wagmi@1/dist/index.js";
-    import { mainnet } from "https://unpkg.com/wagmi@1/chains.js";
+    import { createWeb3Modal, defaultConfig } from 'https://unpkg.com/@web3modal/ethers5@4/dist/index.js'
 
-    // 🔑 Your WalletConnect projectId
-    const projectId = "685604db11bce85e357332363ed2a81f";
+    // 1. Your WalletConnect Cloud project ID
+    const projectId = '685604db11bce85e357332363ed2a81f' // ✅ Your project ID is set here
 
-    // 1. Configure chains (Ethereum mainnet here)
-    const chains = [mainnet];
-    const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
+    // 2. Set chains
+    const mainnet = {
+      chainId: 1,
+      name: 'Ethereum',
+      currency: 'ETH',
+      explorerUrl: 'https://etherscan.io',
+      rpcUrl: 'https://cloudflare-eth.com'
+    }
 
-    // 2. Setup wagmi config
-    const wagmiConfig = createConfig({
-      autoConnect: true,
-      connectors: w3mConnectors({ projectId, version: 2, chains }),
-      publicClient
-    });
+    // 3. Create modal
+    const metadata = {
+      name: 'My Website',
+      description: 'My Website description',
+      url: 'https://mywebsite.com',
+      icons: ['https://avatars.mywebsite.com/']
+    }
 
-    // 3. Setup Ethereum client
-    const ethereumClient = new EthereumClient(wagmiConfig, chains);
+    const modal = createWeb3Modal({
+      ethersConfig: defaultConfig({ 
+        metadata,
+        defaultChainId: 1,
+        rpcUrl: 'https://cloudflare-eth.com'
+      }),
+      chains: [mainnet],
+      projectId,
+      enableAnalytics: true // Optional - defaults to your Cloud configuration
+    })
 
-    // 4. Setup Web3Modal
-    const web3modal = new Web3Modal(
-      {
-        projectId,
-        themeMode: "light",
-        themeVariables: {
-          "--w3m-accent-color": "#4CAF50",
-          "--w3m-background-color": "#fff"
-        }
-      },
-      ethereumClient
-    );
+    // 4. Handle button click
+    const connectBtn = document.getElementById('connectBtn')
+    const statusDiv = document.getElementById('status')
 
-    // 5. On button click, open modal
-    document.getElementById("connectBtn").addEventListener("click", () => {
-      web3modal.openModal();
-    });
+    connectBtn.addEventListener('click', async () => {
+      try {
+        await modal.open()
+      } catch (error) {
+        console.error('Error opening modal:', error)
+        statusDiv.textContent = 'Error: ' + error.message
+      }
+    })
+
+    // 5. Listen for connection events
+    modal.subscribeProvider(({ address, chainId, isConnected }) => {
+      if (isConnected) {
+        statusDiv.innerHTML = `
+          <strong>Connected!</strong><br>
+          Address: ${address}<br>
+          Chain ID: ${chainId}
+        `
+        connectBtn.textContent = 'Disconnect'
+        connectBtn.onclick = () => modal.disconnect()
+      } else {
+        statusDiv.textContent = 'Status: Not connected'
+        connectBtn.textContent = 'Connect Wallet'
+        connectBtn.onclick = () => modal.open()
+      }
+    })
   </script>
 </body>
 </html>
