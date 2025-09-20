@@ -6,9 +6,8 @@
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <script type="module">
     import { EthereumProvider } from "https://esm.sh/@walletconnect/ethereum-provider@2.11.1";
-    import QRCodeModal from "https://esm.sh/@walletconnect/qrcode-modal";
 
-    const projectId = "685604db11bce85e357332363ed2a81f"; // ✅ your WalletConnect Project ID
+    const projectId = "685604db11bce85e357332363ed2a81f"; // ✅ your Project ID
     let provider;
     let web3Provider;
     let signer;
@@ -16,7 +15,7 @@
 
     async function connectWallet() {
       try {
-        // If already connected, just disconnect
+        // If already connected → disconnect
         if (provider && provider.session) {
           await provider.disconnect();
           provider = null;
@@ -31,30 +30,22 @@
         provider = await EthereumProvider.init({
           projectId,
           chains: [1], // Ethereum mainnet
-          showQrModal: false, // we’ll use QRCodeModal
+          showQrModal: true, // ✅ Let WalletConnect open its modal automatically
           rpcMap: {
             1: "https://rpc.ankr.com/eth"
           },
           metadata: {
             name: "Demo DApp",
-            description: "WalletConnect v2 Integration Example",
+            description: "WalletConnect v2 Example",
             url: "https://example.org",
             icons: ["https://walletconnect.com/walletconnect-logo.png"]
           }
         });
 
-        // Show QR code when WC gives us URI
-        provider.on("display_uri", (uri) => {
-          QRCodeModal.open(uri, () => {
-            console.log("QR Modal closed");
-          });
-        });
-
-        // Connect session
+        // Trigger the modal + connect
         await provider.connect();
-        QRCodeModal.close();
 
-        // Wrap provider with ethers
+        // Wrap with ethers.js
         web3Provider = new ethers.providers.Web3Provider(provider);
         signer = web3Provider.getSigner();
         address = await signer.getAddress();
