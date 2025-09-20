@@ -2,54 +2,72 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>WalletConnect Button</title>
+  <title>WalletConnect v2 Example</title>
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <script type="module">
     import { EthereumProvider } from "https://esm.sh/@walletconnect/ethereum-provider@2.11.1";
     import QRCodeModal from "https://esm.sh/@walletconnect/qrcode-modal";
 
-    const projectId = "685604db11bce85e357332363ed2a81f"; // ✅ Your WalletConnect Project ID
+    const projectId = "685604db11bce85e357332363ed2a81f"; // ✅ your WalletConnect Project ID
+    let provider;
+    let web3Provider;
+    let signer;
+    let address;
 
     async function connectWallet() {
       try {
-        // Initialize WalletConnect provider
-        const provider = await EthereumProvider.init({
+        // If already connected, just disconnect
+        if (provider && provider.session) {
+          await provider.disconnect();
+          provider = null;
+          web3Provider = null;
+          signer = null;
+          address = null;
+          updateUI();
+          return;
+        }
+
+        // Initialize WalletConnect Ethereum provider
+        provider = await EthereumProvider.init({
           projectId,
-          chains: [1], // Ethereum Mainnet; add other chain IDs if needed
-          showQrModal: false, // We’ll show our own modal via QRCodeModal
+          chains: [1], // Ethereum mainnet
+          showQrModal: false, // we’ll use QRCodeModal
           rpcMap: {
-            1: "https://rpc.ankr.com/eth" // Free public RPC endpoint
+            1: "https://rpc.ankr.com/eth"
           },
           metadata: {
             name: "Demo DApp",
-            description: "WalletConnect Integration Example",
+            description: "WalletConnect v2 Integration Example",
             url: "https://example.org",
             icons: ["https://walletconnect.com/walletconnect-logo.png"]
           }
         });
 
-        // Show QR modal when WC gives us a URI
+        // Show QR code when WC gives us URI
         provider.on("display_uri", (uri) => {
           QRCodeModal.open(uri, () => {
             console.log("QR Modal closed");
           });
         });
 
-        // Connect wallet
+        // Connect session
         await provider.connect();
         QRCodeModal.close();
 
-        // Wrap with ethers.js for easier usage
-        const web3Provider = new ethers.providers.Web3Provider(provider);
-        const signer = web3Provider.getSigner();
-        const address = await signer.getAddress();
+        // Wrap provider with ethers
+        web3Provider = new ethers.providers.Web3Provider(provider);
+        signer = web3Provider.getSigner();
+        address = await signer.getAddress();
 
-        alert("✅ Connected: " + address);
-        console.log("Connected Address:", address);
+        updateUI();
 
-        // (Optional) handle disconnect
+        // Handle disconnect
         provider.on("disconnect", () => {
-          alert("❌ Wallet disconnected");
+          provider = null;
+          web3Provider = null;
+          signer = null;
+          address = null;
+          updateUI();
         });
 
       } catch (err) {
@@ -58,15 +76,28 @@
       }
     }
 
-    // Attach button click
+    function updateUI() {
+      const btn = document.getElementById("connectBtn");
+      const addrDiv = document.getElementById("address");
+      if (address) {
+        btn.textContent = "Disconnect Wallet";
+        addrDiv.textContent = "✅ Connected: " + address;
+      } else {
+        btn.textContent = "Connect with WalletConnect";
+        addrDiv.textContent = "Not connected";
+      }
+    }
+
     window.addEventListener("DOMContentLoaded", () => {
       document.getElementById("connectBtn").addEventListener("click", connectWallet);
+      updateUI();
     });
   </script>
 </head>
-<body style="display:flex;justify-content:center;align-items:center;height:100vh;background:#f0f2f5;">
-  <button id="connectBtn" style="padding:15px 25px;font-size:18px;border:none;border-radius:8px;background:#3b82f6;color:#fff;cursor:pointer;">
+<body style="display:flex;flex-direction:column;justify-content:center;align-items:center;height:100vh;background:#f0f2f5;font-family:sans-serif;">
+  <button id="connectBtn" style="padding:15px 25px;font-size:18px;border:none;border-radius:8px;background:#3b82f6;color:#fff;cursor:pointer;margin-bottom:20px;">
     Connect with WalletConnect
   </button>
+  <div id="address" style="font-size:16px;color:#333;">Not connected</div>
 </body>
 </html>
